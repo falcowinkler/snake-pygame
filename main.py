@@ -7,7 +7,7 @@ import snake_game
 clock = pygame.time.Clock()
 BOARD_SIZE = 20
 BLOCK_SIZE = 30
-SPEED = 200
+SPEED = 100
 
 palette = pygame.color.THECOLORS
 
@@ -35,9 +35,16 @@ def render(game):
                 pygame.draw.rect(window, BOARD_COLOR, rect)
 
 
+move_event = pygame.USEREVENT + 1
+pygame.time.set_timer(move_event, SPEED)
+
 while not game_obj.game_over():
+    
+
     for e in pygame.event.get():
-        if e.type == QUIT:
+        if e.type == move_event:
+            game_obj.step()
+        elif e.type == QUIT:
             sys.exit(0)
         elif e.type == KEYDOWN:
             if e.key == K_UP:
@@ -50,6 +57,5 @@ while not game_obj.game_over():
                 game_obj.change_dir("right")
     render(game_obj)
     pygame.display.update()
-    clock.tick()
-    pygame.time.wait(SPEED)
-    game_obj.step()
+    clock.tick(30)
+    
